@@ -152,7 +152,7 @@ class AdapterRequestHandler(RequestHandler):
 def build_agent_app(
     agent_card: AgentCard,
     adapter: BaseAgentAdapter,
-) -> A2AStarletteApplication:
+):
     """
     Build an ASGI application for a single A2A agent.
     
@@ -179,12 +179,13 @@ def build_agent_app(
     """
     handler = AdapterRequestHandler(adapter)
     
-    app = A2AStarletteApplication(
+    app_builder = A2AStarletteApplication(
         agent_card=agent_card,
         http_handler=handler,
     )
     
-    return app
+    # Build and return the actual ASGI application
+    return app_builder.build()
 
 
 def serve_agent(
