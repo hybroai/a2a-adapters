@@ -21,7 +21,8 @@ async def load_a2a_agent(config: Dict[str, Any]) -> BaseAgentAdapter:
         config: Configuration dictionary with at least an 'adapter' key.
                 Additional keys depend on the adapter type:
                 
-                - n8n: requires 'webhook_url', optional 'timeout', 'headers'
+                - n8n: requires 'webhook_url', optional 'timeout', 'headers',
+                       'payload_template', 'message_field'
                 - crewai: requires 'crew' (CrewAI Crew instance)
                 - langchain: requires 'runnable', optional 'input_key', 'output_key'
                 - callable: requires 'callable' (async function)
@@ -34,11 +35,19 @@ async def load_a2a_agent(config: Dict[str, Any]) -> BaseAgentAdapter:
         ImportError: If required framework package is not installed
         
     Examples:
-        >>> # Load n8n adapter
+        >>> # Load n8n adapter (basic)
         >>> adapter = await load_a2a_agent({
         ...     "adapter": "n8n",
         ...     "webhook_url": "https://n8n.example.com/webhook/agent",
         ...     "timeout": 30
+        ... })
+        
+        >>> # Load n8n adapter with custom payload mapping
+        >>> adapter = await load_a2a_agent({
+        ...     "adapter": "n8n",
+        ...     "webhook_url": "http://localhost:5678/webhook/my-workflow",
+        ...     "payload_template": {"name": "A2A Agent"},  # Static fields
+        ...     "message_field": "event"  # Use "event" instead of "message"
         ... })
         
         >>> # Load CrewAI adapter
@@ -73,6 +82,8 @@ async def load_a2a_agent(config: Dict[str, Any]) -> BaseAgentAdapter:
             webhook_url=webhook_url,
             timeout=config.get("timeout", 30),
             headers=config.get("headers"),
+            payload_template=config.get("payload_template"),
+            message_field=config.get("message_field", "message"),
         )
     
     elif adapter_type == "crewai":

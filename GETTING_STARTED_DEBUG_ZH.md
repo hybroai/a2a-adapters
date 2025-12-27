@@ -262,7 +262,7 @@ python debug_scripts/04_benchmark.py
 - [ ] 包已安装？`pip list | grep a2a-adapters`
 - [ ] Python 版本正确？`python --version` (>= 3.9)
 - [ ] 能导入包？`python -c "import a2a_adapters"`
-- [ ] 端口未被占用？`lsof -i :8000`
+- [ ] 端口未被占用？`lsof -i :9000`
 - [ ] 环境变量已设置？（如 OPENAI_API_KEY）
 
 ## 🆘 故障排除
@@ -278,7 +278,7 @@ pip install -e .
 
 ```bash
 # 查找占用端口的进程
-lsof -i :8000
+lsof -i :9000
 
 # 杀死进程
 kill -9 <PID>

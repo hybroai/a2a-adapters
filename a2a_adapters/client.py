@@ -192,7 +192,7 @@ def serve_agent(
     agent_card: AgentCard,
     adapter: BaseAgentAdapter,
     host: str = "0.0.0.0",
-    port: int = 8000,
+    port: int = 9000,
     log_level: str = "info",
     **uvicorn_kwargs,
 ) -> None:
@@ -206,7 +206,7 @@ def serve_agent(
         agent_card: A2A AgentCard describing the agent's capabilities
         adapter: BaseAgentAdapter implementation for the agent framework
         host: Host address to bind to (default: "0.0.0.0")
-        port: Port to listen on (default: 8000)
+        port: Port to listen on (default: 9000)
         log_level: Logging level (default: "info")
         **uvicorn_kwargs: Additional arguments to pass to uvicorn.run()
 
@@ -219,7 +219,7 @@ def serve_agent(
         ...     "webhook_url": "https://n8n.example.com/webhook"
         ... })
         >>> card = AgentCard(name="My Agent", description="...")
-        >>> serve_agent(card, adapter, port=8000)
+        >>> serve_agent(card, adapter, port=9000)
     """
     app = build_agent_app(agent_card, adapter)
 

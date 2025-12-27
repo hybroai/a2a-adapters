@@ -33,7 +33,7 @@ export N8N_WEBHOOK_URL="https://your-n8n-instance.com/webhook/agent"
 
 | File | Description | Port | Framework | Streaming |
 |------|-------------|------|-----------|-----------|
-| `01_single_n8n_agent.py` | n8n workflow agent | 8000 | n8n | ❌ |
+| `01_single_n8n_agent.py` | n8n workflow agent | 9000 | n8n | ❌ |
 | `02_single_crewai_agent.py` | CrewAI multi-agent crew | 8001 | CrewAI | ❌ |
 | `03_single_langchain_agent.py` | LangChain chat agent | 8002 | LangChain | ✅ |
 | `04_single_agent_client.py` | A2A client for testing | - | A2A SDK | - |
@@ -54,7 +54,7 @@ export N8N_WEBHOOK_URL="https://n8n.example.com/webhook/math"
 python examples/01_single_n8n_agent.py
 ```
 
-The agent will be available at `http://localhost:8000`.
+The agent will be available at `http://localhost:9000`.
 
 **n8n Workflow Setup:**
 
@@ -97,7 +97,7 @@ The chat agent will be available at `http://localhost:8002` with streaming suppo
 Test any running agent server:
 
 ```bash
-# Make sure an agent is running (e.g., example 01 on port 8000)
+# Make sure an agent is running (e.g., example 01 on port 9000)
 python examples/01_single_n8n_agent.py &
 
 # In another terminal, run the client
@@ -144,7 +144,7 @@ This demonstrates how to:
 
 ```bash
 # Non-streaming request
-curl -X POST http://localhost:8000/messages \
+curl -X POST http://localhost:9000/messages \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -169,7 +169,7 @@ from a2a.client import A2AClient
 from a2a.types import Message, MessageSendParams, TextPart
 
 async def test_agent():
-    client = A2AClient(base_url="http://localhost:8000")
+    client = A2AClient(base_url="http://localhost:9000")
     
     params = MessageSendParams(
         messages=[
@@ -197,7 +197,7 @@ If you see "Address already in use" error:
 
 ```bash
 # Find process using the port
-lsof -i :8000
+lsof -i :9000
 
 # Kill the process
 kill -9 <PID>

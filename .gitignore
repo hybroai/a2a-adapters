@@ -153,3 +153,6 @@ test_outputs/
 
 .venv/
 venv/
+
+# IDE
+*.code-workspace

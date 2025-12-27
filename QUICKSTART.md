@@ -38,8 +38,8 @@ async def main():
     )
     
     # Start the server
-    print("🚀 Echo Agent is running on http://localhost:8000")
-    serve_agent(agent_card=card, adapter=adapter, port=8000)
+    print("🚀 Echo Agent is running on http://localhost:9000")
+    serve_agent(agent_card=card, adapter=adapter, port=9000)
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -63,7 +63,7 @@ from a2a.types import Message, MessageSendParams, TextPart
 
 async def main():
     # Connect to your agent
-    client = A2AClient(base_url="http://localhost:8000")
+    client = A2AClient(base_url="http://localhost:9000")
     
     # Send a message
     params = MessageSendParams(
@@ -181,7 +181,7 @@ class MyCustomAdapter(BaseAgentAdapter):
 
 # Use it
 adapter = MyCustomAdapter()
-serve_agent(agent_card=card, adapter=adapter, port=8000)
+serve_agent(agent_card=card, adapter=adapter, port=9000)
 ```
 
 ## Common Patterns
@@ -189,13 +189,13 @@ serve_agent(agent_card=card, adapter=adapter, port=8000)
 ### Multi-Agent Communication
 
 ```python
-# Agent A (port 8000) - Math Expert
+# Agent A (port 9000) - Math Expert
 # Agent B (port 8001) - Research Expert
 
 # In your orchestrator:
 from a2a.client import A2AClient
 
-math_agent = A2AClient(base_url="http://localhost:8000")
+math_agent = A2AClient(base_url="http://localhost:9000")
 research_agent = A2AClient(base_url="http://localhost:8001")
 
 # Call agents as needed
@@ -247,7 +247,7 @@ Make sure your agent server is running:
 
 ```bash
 # Check if server is running
-curl http://localhost:8000/health
+curl http://localhost:9000/health
 ```
 
 ## Resources

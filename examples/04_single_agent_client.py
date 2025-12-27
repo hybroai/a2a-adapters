@@ -26,7 +26,7 @@ async def main():
     """Call an A2A agent and print the response."""
     
     # Create A2A client pointing to the agent server
-    client = A2AClient(base_url="http://localhost:8000")
+    client = A2AClient(base_url="http://localhost:9000")
     
     # Prepare a message
     message = Message(

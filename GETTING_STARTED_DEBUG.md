@@ -113,7 +113,7 @@ python examples/04_single_agent_client.py
 ## 📝 Troubleshooting
 
 - **ModuleNotFoundError**: Run `source venv/bin/activate && pip install -e .`
-- **Port already in use**: `lsof -i :8000` to find process, then `kill -9 <PID>`
+- **Port already in use**: `lsof -i :9000` to find process, then `kill -9 <PID>`
 - **Permission denied**: Make scripts executable with `chmod +x run_agent.sh`
 
 ## 🎉 Congratulations!

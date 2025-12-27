@@ -126,7 +126,7 @@ async def main():
     )
 
     # Start server
-    serve_agent(agent_card=card, adapter=adapter, port=8000)
+    serve_agent(agent_card=card, adapter=adapter, port=9000)
 
 asyncio.run(main())
 ```
@@ -298,7 +298,7 @@ from langgraph.graph import StateGraph
 from a2a.client import A2AClient
 
 # Create A2A client
-math_agent = A2AClient(base_url="http://localhost:8000")
+math_agent = A2AClient(base_url="http://localhost:9000")
 
 # Use in LangGraph node
 async def call_math_agent(state):
@@ -431,7 +431,7 @@ Build an ASGI application for serving an A2A agent.
 
 - ASGI application ready to be served
 
-#### `serve_agent(agent_card, adapter, host="0.0.0.0", port=8000, **kwargs)`
+#### `serve_agent(agent_card, adapter, host="0.0.0.0", port=9000, **kwargs)`
 
 Start serving an A2A agent (convenience function).
 
@@ -440,7 +440,7 @@ Start serving an A2A agent (convenience function).
 - `agent_card`: A2A AgentCard
 - `adapter`: Adapter instance
 - `host`: Host address (default: "0.0.0.0")
-- `port`: Port number (default: 8000)
+- `port`: Port number (default: 9000)
 - `**kwargs`: Additional arguments passed to `uvicorn.run()`
 
 ### BaseAgentAdapter

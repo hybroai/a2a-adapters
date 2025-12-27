@@ -84,7 +84,7 @@ async def create_workflow():
     
     # Initialize the A2A agent tool
     math_agent = A2AAgentTool(
-        agent_url="http://localhost:8000",
+        agent_url="http://localhost:9000",
         agent_name="Math Agent"
     )
     
@@ -208,7 +208,7 @@ if __name__ == "__main__":
         exit(1)
     
     # Ensure math agent is running
-    print("⚠️  Make sure the Math Agent is running on port 8000")
+    print("⚠️  Make sure the Math Agent is running on port 9000")
     print("   (Run: python examples/01_single_n8n_agent.py)")
     print()
     input("Press Enter to continue...")
