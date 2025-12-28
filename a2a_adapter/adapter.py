@@ -23,6 +23,11 @@ class BaseAgentAdapter(ABC):
     1. to_framework: Convert A2A MessageSendParams to framework input
     2. call_framework: Execute the framework-specific logic
     3. from_framework: Convert framework output back to A2A Message/Task
+    
+    For adapters that support async task execution, the adapter can:
+    - Return a Task with state="submitted" or "working" immediately
+    - Run the actual work in the background
+    - Allow clients to poll for task status via get_task()
     """
 
     async def handle(self, params: MessageSendParams) -> Message | Task:
@@ -124,4 +129,57 @@ class BaseAgentAdapter(ABC):
             )
         except AttributeError:
             return False
+
+    def supports_async_tasks(self) -> bool:
+        """
+        Check if this adapter supports async task execution.
+        
+        Async task execution allows the adapter to return a Task immediately
+        with state="working" and process the request in the background.
+        Clients can then poll for task status via get_task().
+        
+        Returns:
+            True if async tasks are supported, False otherwise
+        """
+        return False
+
+    async def get_task(self, task_id: str) -> Task | None:
+        """
+        Get the current status of a task by ID.
+        
+        This method is used for polling task status in async task execution mode.
+        Override this method in subclasses that support async tasks.
+        
+        Args:
+            task_id: The ID of the task to retrieve
+            
+        Returns:
+            The Task object with current status, or None if not found
+            
+        Raises:
+            NotImplementedError: If async tasks are not supported by this adapter
+        """
+        raise NotImplementedError(
+            f"{self.__class__.__name__} does not support async task execution"
+        )
+
+    async def cancel_task(self, task_id: str) -> Task | None:
+        """
+        Attempt to cancel a running task.
+        
+        This method is used to cancel async tasks that are still in progress.
+        Override this method in subclasses that support async tasks.
+        
+        Args:
+            task_id: The ID of the task to cancel
+            
+        Returns:
+            The updated Task object with state="canceled", or None if not found
+            
+        Raises:
+            NotImplementedError: If async tasks are not supported by this adapter
+        """
+        raise NotImplementedError(
+            f"{self.__class__.__name__} does not support async task execution"
+        )
 

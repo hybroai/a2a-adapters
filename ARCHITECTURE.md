@@ -139,15 +139,39 @@ Bridges our `BaseAgentAdapter` with the official A2A SDK's handler interface:
 
 **Purpose:** Expose n8n workflows as A2A agents
 
-**Flow:**
+**Execution Modes:**
+
+1. **Synchronous Mode** (default):
+   - Blocks until n8n workflow completes
+   - Returns A2A `Message` with the response
+   - Best for quick workflows (< 30 seconds)
+
+2. **Async Task Mode** (`async_mode=True`):
+   - Returns A2A `Task` immediately with `state=working`
+   - Executes workflow in background
+   - Clients poll `get_task()` for status updates
+   - Best for long-running workflows
+
+**Flow (Sync Mode):**
 1. Extract user message text from A2A message
 2. POST to n8n webhook URL with JSON payload
 3. Parse n8n response and wrap in A2A Message
+
+**Flow (Async Task Mode):**
+1. Create Task with `state=working`, save to TaskStore
+2. Start background coroutine for workflow execution
+3. Return Task immediately to client
+4. Background: POST to n8n webhook, wait for response
+5. Background: Update Task to `state=completed` or `state=failed`
+6. Client polls `get_task(task_id)` to check status
 
 **Key Features:**
 - Configurable timeout and custom headers
 - Async HTTP client with connection pooling
 - Supports common n8n response formats (`output`, `result`, `message`)
+- **Async Task Mode** for long-running workflows
+- Integrates with A2A SDK's `TaskStore` (InMemoryTaskStore or DatabaseTaskStore)
+- Task cancellation support via `cancel_task()`
 
 #### CrewAI Adapter (`crewai.py`)
 
@@ -248,6 +272,46 @@ BaseAgentAdapter.handle_stream()
     ▼
 Stream SSE events to A2A Client
 ```
+
+### Async Task Request (N8n Adapter)
+
+For long-running workflows, the N8n adapter supports async task mode:
+
+```
+A2A Client                              N8n Adapter                         n8n Workflow
+    │                                        │                                   │
+    │ POST /messages                         │                                   │
+    ├───────────────────────────────────────▶│                                   │
+    │                                        │                                   │
+    │                                        │ Create Task(state=working)        │
+    │                                        │ Save to TaskStore                 │
+    │                                        │ Start background coroutine        │
+    │                                        │                                   │
+    │◀─── Task(id=xyz, state=working) ───────│                                   │
+    │                                        │                                   │
+    │                                        │──── POST webhook ────────────────▶│
+    │                                        │                                   │
+    │ GET /tasks/xyz (polling)               │                     (processing)  │
+    ├───────────────────────────────────────▶│                                   │
+    │◀─── Task(state=working) ───────────────│                                   │
+    │                                        │                                   │
+    │                                        │◀─── {"output": "..."} ────────────│
+    │                                        │                                   │
+    │                                        │ Update Task(state=completed)      │
+    │                                        │ Save to TaskStore                 │
+    │                                        │                                   │
+    │ GET /tasks/xyz (polling)               │                                   │
+    ├───────────────────────────────────────▶│                                   │
+    │◀─── Task(state=completed, result) ─────│                                   │
+    │                                        │                                   │
+```
+
+**Key Points:**
+- Client receives `Task` immediately (non-blocking)
+- Workflow executes in background coroutine
+- Client polls `get_task()` to check status
+- Task transitions: `working` → `completed` (or `failed`)
+- Uses A2A SDK's `TaskStore` for state persistence
 
 ## Extension Points
 
@@ -369,13 +433,20 @@ All adapters use `async/await` for maximum concurrency:
 
 ## Future Enhancements
 
+### Implemented Features
+
+1. ✅ **Task Support** (N8n Adapter): Async task execution with background polling
+   - `async_mode=True` enables async task execution
+   - Integrates with A2A SDK's `TaskStore` (InMemoryTaskStore or DatabaseTaskStore)
+   - Supports task cancellation
+
 ### Planned Features
 
-1. **Task Support**: Implement async task execution pattern
-2. **Artifact Support**: Handle file uploads/downloads
-3. **More Adapters**: AutoGen, Semantic Kernel, Haystack, etc.
-4. **Middleware**: Logging, metrics, rate limiting hooks
-5. **Configuration Validation**: Pydantic schemas for adapter configs
+1. **Artifact Support**: Handle file uploads/downloads
+2. **More Adapters**: AutoGen, Semantic Kernel, Haystack, etc.
+3. **Middleware**: Logging, metrics, rate limiting hooks
+4. **Configuration Validation**: Pydantic schemas for adapter configs
+5. **Task Support for Other Adapters**: Extend async task pattern to CrewAI, LangChain
 
 ### Breaking Changes
 
