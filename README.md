@@ -49,15 +49,15 @@ A Python SDK that enables seamless integration of various agent frameworks (n8n,
 
 **Single-Agent Design**: Each server hosts exactly one agent. Multi-agent orchestration is handled externally via A2A protocol or orchestration frameworks like LangGraph.
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed design documentation.
+See [ARCHITECTURE.md](https://github.com/hybroai/a2a-adapter/blob/main/ARCHITECTURE.md) for detailed design documentation.
 
 ## Documentation
 
-- 🚀 Quick Start: [QUICKSTART.md](QUICKSTART.md)
-- 🧪 Examples: [examples/](examples/)
-- 🛠 Debug & Advanced Usage: [GETTING_STARTED_DEBUG.md](GETTING_STARTED_DEBUG.md)
-- 🧠 Architecture: [ARCHITECTURE.md](ARCHITECTURE.md)
-- 🤝 Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
+- 🚀 Quick Start: [QUICKSTART.md](https://github.com/hybroai/a2a-adapter/blob/main/QUICKSTART.md)
+- 🧪 Examples: [examples/](https://github.com/hybroai/a2a-adapter/tree/main/examples/)
+- 🛠 Debug & Advanced Usage: [GETTING_STARTED_DEBUG.md](https://github.com/hybroai/a2a-adapter/blob/main/GETTING_STARTED_DEBUG.md)
+- 🧠 Architecture: [ARCHITECTURE.md](https://github.com/hybroai/a2a-adapter/blob/main/ARCHITECTURE.md)
+- 🤝 Contributing: [CONTRIBUTING.md](https://github.com/hybroai/a2a-adapter/blob/main/CONTRIBUTING.md)
 
 ## Installation
 
@@ -91,7 +91,7 @@ pip install a2a-adapter[dev]
 
 ## 🚀 Quick Start
 
-**Get started in 5 minutes!** See [QUICKSTART.md](QUICKSTART.md) for detailed guide.
+**Get started in 5 minutes!** See [QUICKSTART.md](https://github.com/hybroai/a2a-adapter/blob/main/QUICKSTART.md) for detailed guide.
 
 ### Install
 
@@ -121,7 +121,7 @@ asyncio.run(main())
 
 **That's it!** Your agent is now A2A-compatible and ready to communicate with other A2A agents.
 
-👉 **[Read the full Quick Start Guide →](QUICKSTART.md)**
+👉 **[Read the full Quick Start Guide →](https://github.com/hybroai/a2a-adapter/blob/main/QUICKSTART.md)**
 
 ## 📖 Usage Examples
 
@@ -165,7 +165,7 @@ adapter = await load_a2a_agent({
 })
 ```
 
-📚 **[View all examples →](examples/)**
+📚 **[View all examples →](https://github.com/hybroai/a2a-adapter/tree/main/examples/)**
 
 ## Advanced Usage
 
@@ -249,7 +249,7 @@ graph = StateGraph(...)
 graph.add_node("math", call_math_agent)
 ```
 
-See [examples/06_langgraph_single_agent.py](examples/06_langgraph_single_agent.py) for complete example.
+See [examples/06_langgraph_single_agent.py](https://github.com/hybroai/a2a-adapter/blob/main/examples/06_langgraph_single_agent.py) for complete example.
 
 ## Configuration
 
@@ -438,7 +438,7 @@ We welcome contributions from the community! Whether you're fixing bugs, adding 
 4. Run tests (`pytest`)
 5. Submit a pull request
 
-📖 **[Read our Contributing Guide →](CONTRIBUTING.md)** for detailed instructions, coding standards, and development setup.
+📖 **[Read our Contributing Guide →](https://github.com/hybroai/a2a-adapter/blob/main/CONTRIBUTING.md)** for detailed instructions, coding standards, and development setup.
 
 ## Roadmap
 
@@ -481,7 +481,7 @@ We welcome contributions from the community! Whether you're fixing bugs, adding 
 
 ## License
 
-Apache-2.0 License - see [LICENSE](LICENSE) file for details.
+Apache-2.0 License - see [LICENSE](https://github.com/hybroai/a2a-adapter/blob/main/LICENSE) file for details.
 
 ## Credits
 
@@ -491,16 +491,16 @@ Powered by the [A2A Protocol](https://github.com/a2aproject/A2A)
 
 ## 💬 Community & Support
 
-- 📚 **[Full Documentation](README.md)** - Complete API reference and guides
-- 🚀 **[Quick Start Guide](QUICKSTART.md)** - Get started in 5 minutes
-- 🏗️ **[Architecture Guide](ARCHITECTURE.md)** - Deep dive into design decisions
+- 📚 **[Full Documentation](https://github.com/hybroai/a2a-adapter/blob/main/README.md)** - Complete API reference and guides
+- 🚀 **[Quick Start Guide](https://github.com/hybroai/a2a-adapter/blob/main/QUICKSTART.md)** - Get started in 5 minutes
+- 🏗️ **[Architecture Guide](https://github.com/hybroai/a2a-adapter/blob/main/ARCHITECTURE.md)** - Deep dive into design decisions
 - 🐛 **[Report Issues](https://github.com/hybroai/a2a-adapter/issues)** - Found a bug? Let us know!
 - 💬 **[Discussions](https://github.com/hybroai/a2a-adapter/discussions)** - Ask questions and share ideas
-- 🤝 **[Contributing Guide](CONTRIBUTING.md)** - Want to contribute? Start here!
+- 🤝 **[Contributing Guide](https://github.com/hybroai/a2a-adapter/blob/main/CONTRIBUTING.md)** - Want to contribute? Start here!
 
 ## 📄 License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/hybroai/a2a-adapter/blob/main/LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
