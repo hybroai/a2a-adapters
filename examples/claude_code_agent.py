@@ -22,7 +22,7 @@ Security:
 Usage:
     python examples/claude_code_agent.py
     python examples/claude_code_agent.py /path/to/project
-    # Agent card at http://localhost:9010/.well-known/agent.json
+    # Agent card at http://localhost:9010/.well-known/agent-card.json
 """
 
 import os
@@ -41,9 +41,9 @@ adapter = ClaudeCodeAdapter(
     # skip_permissions=True,
 )
 
-print(f"Starting Claude Code A2A agent...")
+print("Starting Claude Code A2A agent...")
 print(f"  Working directory: {working_dir}")
 print(f"  Skip permissions: {adapter.skip_permissions}")
-print(f"  Agent card: http://localhost:9010/.well-known/agent.json")
+print("  Agent card: http://localhost:9010/.well-known/agent-card.json")
 
 serve_agent(adapter, port=9010)

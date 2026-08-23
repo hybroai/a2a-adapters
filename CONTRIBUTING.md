@@ -57,10 +57,12 @@ The n8n adapter times out after 10 seconds even when timeout is set to 60.
 **To Reproduce**
 
 ```python
-adapter = await load_a2a_agent({
+from a2a_adapter import load_adapter
+
+adapter = load_adapter({
     "adapter": "n8n",
     "webhook_url": "...",
-    "timeout": 60
+    "timeout": 60,
 })
 ```
 ````
@@ -72,7 +74,7 @@ Should wait up to 60 seconds before timing out.
 
 - Python 3.11.5
 - macOS 14.0
-- a2a-adapter 0.1.0
+- a2a-adapter `<installed version>`
 
 ````
 
@@ -102,9 +104,11 @@ Enable AutoGen multi-agent systems to communicate via A2A protocol.
 
 **Proposed API**
 ```python
-adapter = await load_a2a_agent({
+from a2a_adapter import load_adapter
+
+adapter = load_adapter({
     "adapter": "autogen",
-    "group_chat": autogen_group_chat_instance
+    "group_chat": autogen_group_chat_instance,
 })
 ````
 
@@ -325,6 +329,8 @@ Related to #456
 
 ## Development Setup
 
+Python 3.11 or newer is required.
+
 ### 1. Clone the Repository
 
 ```bash
@@ -355,8 +361,8 @@ pytest
 # Run with coverage
 pytest --cov=a2a_adapter --cov-report=html
 
-# Run specific test file
-pytest tests/unit/test_adapter.py
+# Run a specific test file
+pytest tests/unit/test_v02_core.py
 
 # Run with verbose output
 pytest -v
@@ -514,6 +520,7 @@ Fixed the bug in n8n adapter
 - [ ] Documentation updated
 - [ ] CHANGELOG.md updated
 - [ ] Version bumped in `pyproject.toml` and `a2a_adapter/__init__.py`
+- [ ] Package version consistency test passes
 - [ ] Release notes prepared
 
 ### Release Steps
@@ -522,16 +529,16 @@ Fixed the bug in n8n adapter
 
    ```bash
    # Update pyproject.toml
-   version = "0.1.1"
+   version = "X.Y.Z"
 
    # Update a2a_adapter/__init__.py
-   __version__ = "0.1.1"
+   __version__ = "X.Y.Z"
    ```
 
 2. **Update CHANGELOG.md**
 
    ```markdown
-   ## [0.1.1] - 2024-01-15
+   ## [X.Y.Z] - YYYY-MM-DD
 
    - Added: New feature X
    - Fixed: Bug Y
@@ -541,13 +548,13 @@ Fixed the bug in n8n adapter
 
    ```bash
    git add pyproject.toml a2a_adapter/__init__.py CHANGELOG.md
-   git commit -m "chore: release v0.1.1"
+   git commit -m "chore: release vX.Y.Z"
    ```
 
 4. **Create and push tag**
 
    ```bash
-   git tag v0.1.1
+   git tag vX.Y.Z
    git push origin main --tags
    ```
 

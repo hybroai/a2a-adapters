@@ -7,23 +7,28 @@ This package contains concrete adapter implementations for various agent framewo
 - LangChain: LLM application framework with LCEL support
 - LangGraph: Stateful workflow orchestration framework
 - Callable: Generic Python async function adapter
+- Claude Code: Streaming coding agent CLI wrapper
+- Codex: Coding agent CLI wrapper
 - OpenClaw: Personal AI super agent CLI wrapper
+- Ollama: Local model HTTP integration
 - Hermes: Multi-purpose AI agent with tool use and persistent memory
 - Pi: Persistent coding agent RPC wrapper
 
-Each module exports both:
-- v0.2 adapter class (e.g., N8nAdapter) — new simplified interface
-- v0.1 adapter class (e.g., N8nAgentAdapter) — deprecated, for backwards compat
+Migrated framework modules also retain deprecated v0.1 `*AgentAdapter`
+classes for backwards compatibility. Newer CLI-backed integrations expose
+only the current adapter interface.
 """
 
 __all__ = [
-    # v0.2 (new)
+    # Current adapters
     "N8nAdapter",
     "CrewAIAdapter",
     "LangChainAdapter",
     "LangGraphAdapter",
     "CallableAdapter",
     "OpenClawAdapter",
+    "ClaudeCodeAdapter",
+    "CodexAdapter",
     "OllamaAdapter",
     "OllamaClient",
     "HermesAdapter",
@@ -40,7 +45,7 @@ __all__ = [
 
 # Lazy imports to avoid requiring all optional dependencies
 def __getattr__(name: str):
-    # v0.2 adapters
+    # Current adapters
     if name == "N8nAdapter":
         from .n8n import N8nAdapter
         return N8nAdapter
@@ -59,6 +64,12 @@ def __getattr__(name: str):
     elif name == "OpenClawAdapter":
         from .openclaw import OpenClawAdapter
         return OpenClawAdapter
+    elif name == "ClaudeCodeAdapter":
+        from .claude_code import ClaudeCodeAdapter
+        return ClaudeCodeAdapter
+    elif name == "CodexAdapter":
+        from .codex import CodexAdapter
+        return CodexAdapter
     elif name == "OllamaAdapter":
         from .ollama import OllamaAdapter
         return OllamaAdapter

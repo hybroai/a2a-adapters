@@ -67,7 +67,7 @@ async def main():
     # 1. Fetch agent card
     print("Fetching agent card...")
     async with httpx.AsyncClient() as client:
-        card = (await client.get(f"{agent_url}/.well-known/agent.json")).json()
+        card = (await client.get(f"{agent_url}/.well-known/agent-card.json")).json()
     print(f"Agent: {card['name']} — {card.get('description', '')}")
     print()
 

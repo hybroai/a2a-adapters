@@ -5,12 +5,13 @@ calls into A2A SDK events. Tests use mock RequestContext and EventQueue
 to verify the full lifecycle without needing a real HTTP server.
 """
 
-import asyncio
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch, call
+from unittest.mock import AsyncMock, MagicMock, patch
 
+import pytest
+from a2a.server.tasks.task_updater import TaskUpdater
+
+from a2a_adapter.base_adapter import BaseA2AAdapter
 from a2a_adapter.executor import AdapterAgentExecutor
-from a2a_adapter.base_adapter import BaseA2AAdapter, AdapterMetadata
 
 
 # ──── Helpers: Minimal Adapter Implementations ────
@@ -113,7 +114,7 @@ async def test_execute_invoke_basic():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        updater_instance = AsyncMock()
+        updater_instance = AsyncMock(spec=TaskUpdater)
         MockUpdater.return_value = updater_instance
 
         await executor.execute(ctx, queue)
@@ -152,7 +153,7 @@ async def test_execute_invoke_passes_context():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        MockUpdater.return_value = AsyncMock()
+        MockUpdater.return_value = AsyncMock(spec=TaskUpdater)
         await executor.execute(ctx, queue)
 
     assert adapter.received_input == "hello"
@@ -169,7 +170,7 @@ async def test_execute_invoke_empty_input():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        MockUpdater.return_value = AsyncMock()
+        MockUpdater.return_value = AsyncMock(spec=TaskUpdater)
         await executor.execute(ctx, queue)
 
         MockUpdater.return_value.complete.assert_awaited_once()
@@ -188,7 +189,7 @@ async def test_execute_streaming_basic():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        updater_instance = AsyncMock()
+        updater_instance = AsyncMock(spec=TaskUpdater)
         MockUpdater.return_value = updater_instance
 
         await executor.execute(ctx, queue)
@@ -216,7 +217,7 @@ async def test_execute_streaming_complete_message():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        updater_instance = AsyncMock()
+        updater_instance = AsyncMock(spec=TaskUpdater)
         MockUpdater.return_value = updater_instance
 
         await executor.execute(ctx, queue)
@@ -241,7 +242,7 @@ async def test_execute_invoke_error():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        updater_instance = AsyncMock()
+        updater_instance = AsyncMock(spec=TaskUpdater)
         MockUpdater.return_value = updater_instance
 
         await executor.execute(ctx, queue)
@@ -265,7 +266,7 @@ async def test_execute_stream_error():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        updater_instance = AsyncMock()
+        updater_instance = AsyncMock(spec=TaskUpdater)
         MockUpdater.return_value = updater_instance
 
         await executor.execute(ctx, queue)
@@ -286,7 +287,7 @@ async def test_cancel_delegates_to_adapter():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        updater_instance = AsyncMock()
+        updater_instance = AsyncMock(spec=TaskUpdater)
         MockUpdater.return_value = updater_instance
 
         await executor.cancel(ctx, queue)
@@ -305,7 +306,7 @@ async def test_cancel_adapter_error_still_cancels():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        updater_instance = AsyncMock()
+        updater_instance = AsyncMock(spec=TaskUpdater)
         MockUpdater.return_value = updater_instance
 
         await executor.cancel(ctx, queue)
@@ -329,7 +330,7 @@ async def test_invoke_only_adapter_routes_to_invoke():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        MockUpdater.return_value = AsyncMock()
+        MockUpdater.return_value = AsyncMock(spec=TaskUpdater)
 
         with patch.object(executor, "_execute_invoke", new_callable=AsyncMock) as mock_invoke:
             with patch.object(executor, "_execute_streaming", new_callable=AsyncMock) as mock_stream:
@@ -350,7 +351,7 @@ async def test_streaming_adapter_routes_to_stream():
     queue = make_mock_event_queue()
 
     with patch("a2a_adapter.executor.TaskUpdater") as MockUpdater:
-        MockUpdater.return_value = AsyncMock()
+        MockUpdater.return_value = AsyncMock(spec=TaskUpdater)
 
         with patch.object(executor, "_execute_invoke", new_callable=AsyncMock) as mock_invoke:
             with patch.object(executor, "_execute_streaming", new_callable=AsyncMock) as mock_stream:

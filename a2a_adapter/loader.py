@@ -171,7 +171,8 @@ async def load_a2a_agent(config: Dict[str, Any]) -> Any:
     """
     warnings.warn(
         "load_a2a_agent() is deprecated, use load_adapter() instead. "
-        "See migration guide: https://github.com/hybro-ai/a2a-adapter/blob/main/docs/migration-v0.2.md",
+        "See the v0.2 migration notes: "
+        "https://github.com/hybroai/a2a-adapter/blob/main/CHANGELOG.md#020---2026-02-09",
         DeprecationWarning,
         stacklevel=2,
     )

@@ -320,12 +320,12 @@ serve_agent(adapter, port=8001)
 export OPENAI_API_KEY="sk-..."
 ```
 
-**Need more help?** See [GETTING_STARTED_DEBUG.md](GETTING_STARTED_DEBUG.md) for detailed debugging.
+For development setup, test commands, and debugging guidance, see
+[CONTRIBUTING.md](CONTRIBUTING.md#development-setup).
 
 ## Additional Resources
 
 - [Full Documentation](README.md) — Complete API reference
 - [Architecture Guide](ARCHITECTURE.md) — Design and implementation details
 - [Examples](examples/) — Complete working examples
-- [Debug Guide](GETTING_STARTED_DEBUG.md) — Troubleshooting and debugging
-- [Contributing](CONTRIBUTING.md) — How to contribute
+- [Contributing](CONTRIBUTING.md) — Development setup and contribution guide

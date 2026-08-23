@@ -140,6 +140,7 @@ cython_debug/
 .idea/
 *.swp
 *.swo
+*.code-workspace
 *~
 
 # OS
@@ -150,9 +151,4 @@ Thumbs.db
 *.db
 *.sqlite
 test_outputs/
-
-.venv/
-venv/
-
-# IDE
-*.code-workspace
+.pi-subagents/

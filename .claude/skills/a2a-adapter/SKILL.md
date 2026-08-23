@@ -17,6 +17,17 @@ pip install a2a-adapter[langgraph]     # + LangGraph
 pip install a2a-adapter[all]           # Everything
 ```
 
+## CLI Pattern
+
+Expose an installed local agent without writing Python:
+
+```bash
+a2a-adapter pi --port 9012
+a2a-adapter codex --port 9011
+a2a-adapter claude --port 9010
+a2a-adapter openclaw --port 9008
+```
+
 ## Core Pattern (3 lines)
 
 ```python
@@ -26,7 +37,7 @@ adapter = XxxAdapter(...)       # Create adapter
 serve_agent(adapter, port=9000) # Start A2A server
 ```
 
-`serve_agent()` starts uvicorn with auto-generated AgentCard at `/.well-known/agent.json`.
+`serve_agent()` starts uvicorn with an auto-generated AgentCard at `/.well-known/agent-card.json`.
 
 ## Decision Guide
 
@@ -37,8 +48,12 @@ serve_agent(adapter, port=9000) # Start A2A server
 | LangChain chain | `LangChainAdapter(runnable=chain)` |
 | LangGraph workflow | `LangGraphAdapter(graph=graph)` |
 | CrewAI crew | `CrewAIAdapter(crew=crew)` |
+| Claude Code CLI | `ClaudeCodeAdapter(working_dir=...)` |
+| Codex CLI | `CodexAdapter(working_dir=...)` |
+| Pi coding agent | `PiAdapter(working_dir=...)` |
 | OpenClaw agent | `OpenClawAdapter(...)` |
-| Local Ollama model | `OllamaAdapter(model="llama3.2:8b")` |
+| Hermes Agent | `HermesAdapter(...)` |
+| Local Ollama model | `OllamaAdapter(model="llama3.2")` |
 | Any other framework | Subclass `BaseA2AAdapter`, implement `invoke()` |
 | Need streaming | Implement `stream()` or use LangChain/LangGraph/Ollama (auto) |
 | Need multimodal output | Return `list[Part]` from `invoke()` |

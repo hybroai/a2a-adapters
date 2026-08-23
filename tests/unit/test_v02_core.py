@@ -234,7 +234,7 @@ def test_build_card_push_notifications_enabled():
 
 def test_serve_agent_url_from_port():
     """serve_agent should derive the AgentCard URL from host/port."""
-    with patch("a2a_adapter.server.uvicorn") as mock_uvicorn:
+    with patch("a2a_adapter.server.uvicorn"):
         with patch("a2a_adapter.server.to_a2a") as mock_to_a2a:
             mock_to_a2a.return_value = MagicMock()
             serve_agent(MinimalAdapter(), port=9008)
@@ -245,7 +245,7 @@ def test_serve_agent_url_from_port():
 
 def test_serve_agent_wildcard_host_normalized():
     """Wildcard bind addresses should be normalized to localhost in the card URL."""
-    with patch("a2a_adapter.server.uvicorn") as mock_uvicorn:
+    with patch("a2a_adapter.server.uvicorn"):
         with patch("a2a_adapter.server.to_a2a") as mock_to_a2a:
             mock_to_a2a.return_value = MagicMock()
             serve_agent(MinimalAdapter(), host="0.0.0.0", port=9005)
@@ -256,7 +256,7 @@ def test_serve_agent_wildcard_host_normalized():
 
 def test_serve_agent_ipv6_wildcard_normalized():
     """IPv6 wildcard :: should be normalized to localhost."""
-    with patch("a2a_adapter.server.uvicorn") as mock_uvicorn:
+    with patch("a2a_adapter.server.uvicorn"):
         with patch("a2a_adapter.server.to_a2a") as mock_to_a2a:
             mock_to_a2a.return_value = MagicMock()
             serve_agent(MinimalAdapter(), host="::", port=9005)
@@ -267,7 +267,7 @@ def test_serve_agent_ipv6_wildcard_normalized():
 
 def test_serve_agent_custom_host_preserved():
     """Non-wildcard hosts should be preserved in the card URL."""
-    with patch("a2a_adapter.server.uvicorn") as mock_uvicorn:
+    with patch("a2a_adapter.server.uvicorn"):
         with patch("a2a_adapter.server.to_a2a") as mock_to_a2a:
             mock_to_a2a.return_value = MagicMock()
             serve_agent(MinimalAdapter(), host="192.168.1.100", port=9010)
@@ -286,7 +286,7 @@ def test_serve_agent_prebuilt_card_not_overridden():
         supported_interfaces=[AgentInterface(url="https://prod.example.com")],
         skills=[], default_input_modes=["text"], default_output_modes=["text"],
     )
-    with patch("a2a_adapter.server.uvicorn") as mock_uvicorn:
+    with patch("a2a_adapter.server.uvicorn"):
         with patch("a2a_adapter.server.to_a2a") as mock_to_a2a:
             mock_to_a2a.return_value = MagicMock()
             serve_agent(MinimalAdapter(), agent_card=custom_card, port=9999)
@@ -415,9 +415,12 @@ def test_register_priority_over_builtin():
 
 
 def test_import_core_directly():
-    from a2a_adapter import BaseA2AAdapter, AdapterMetadata, serve_agent, to_a2a
+    from a2a_adapter import AdapterMetadata, BaseA2AAdapter, serve_agent, to_a2a
+
     assert BaseA2AAdapter is not None
     assert AdapterMetadata is not None
+    assert serve_agent is not None
+    assert to_a2a is not None
 
 
 def test_import_adapter_lazily():
@@ -434,15 +437,31 @@ def test_import_all_adapters():
         LangGraphAdapter,
         CrewAIAdapter,
         OpenClawAdapter,
+        ClaudeCodeAdapter,
+        CodexAdapter,
         OllamaAdapter,
         HermesAdapter,
+        PiAdapter,
     )
-    adapters = [N8nAdapter, CallableAdapter, LangChainAdapter,
-                LangGraphAdapter, CrewAIAdapter, OpenClawAdapter,
-                OllamaAdapter, HermesAdapter]
+    adapters = [
+        N8nAdapter,
+        CallableAdapter,
+        LangChainAdapter,
+        LangGraphAdapter,
+        CrewAIAdapter,
+        OpenClawAdapter,
+        ClaudeCodeAdapter,
+        CodexAdapter,
+        OllamaAdapter,
+        HermesAdapter,
+        PiAdapter,
+    ]
     assert all(a is not None for a in adapters)
 
 
-def test_version():
+def test_version_matches_package_metadata():
+    from importlib.metadata import version
+
     from a2a_adapter import __version__
-    assert __version__ == "0.2.10"
+
+    assert __version__ == version("a2a-adapter")
