@@ -18,8 +18,8 @@ Use `a2a-adapter -help` for CLI usage. Hermes remains SDK-only in v1.
 ## Prerequisites
 
 ```bash
-pip install a2a-adapter[all]   # All frameworks
-# Or install individually:
+pip install -r examples/requirements.txt  # SDK, all framework extras, example-only deps
+# Or install only what you need:
 pip install a2a-adapter                # Core (n8n, callable)
 pip install a2a-adapter[crewai]        # + CrewAI
 pip install a2a-adapter[langchain]     # + LangChain
@@ -61,7 +61,7 @@ export ANTHROPIC_API_KEY="your-key"
 | `pi_agent.py` | Pi | Yes | 9012 | One persistent Pi RPC session -> A2A server |
 | `custom_adapter.py` | Custom | - | 8003 | Custom BaseA2AAdapter (sentiment analyzer) |
 | `single_agent_client.py` | httpx | - | - | **Client**: test any A2A agent |
-| `v02_quickstart.py` | Mixed | - | 9000 | Quick start: callable, n8n, custom |
+| `quickstart.py` | Mixed | - | 9000 | Quick start: callable, n8n, custom |
 
 ## Python SDK Quick Start
 
@@ -100,7 +100,7 @@ python examples/single_agent_client.py
 
 ```bash
 # Fetch agent card
-curl http://localhost:9000/.well-known/agent.json
+curl http://localhost:9000/.well-known/agent-card.json
 
 # Send a message
 curl -X POST http://localhost:9000 \

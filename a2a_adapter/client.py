@@ -56,7 +56,6 @@ try:
         ListTaskPushNotificationConfigParams,
         ListTaskPushNotificationConfigResponse,
         MessageSendParams,
-        PushNotificationConfig,
         SetTaskPushNotificationConfigRequest,
         SetTaskPushNotificationConfigResponse,
         TaskResubscriptionRequest,
@@ -244,7 +243,8 @@ if _HAS_LEGACY_SDK:
         """
         warnings.warn(
             "build_agent_app() is deprecated, use to_a2a(adapter) instead. "
-            "See migration guide: https://github.com/hybro-ai/a2a-adapter/blob/main/docs/migration-v0.2.md",
+            "See the v0.2 migration notes: "
+            "https://github.com/hybroai/a2a-adapter/blob/main/CHANGELOG.md#020---2026-02-09",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -307,13 +307,14 @@ else:
     def build_agent_app(*args, **kwargs):
         raise RuntimeError(
             "client.py is deprecated and incompatible with a2a-sdk>=1.0. "
-            "Use to_a2a(adapter) instead. See: "
-            "https://github.com/hybro-ai/a2a-adapter/blob/main/docs/migration-v0.2.md"
+            "Use to_a2a(adapter) instead. See the v0.2 migration notes: "
+            "https://github.com/hybroai/a2a-adapter/blob/main/CHANGELOG.md#020---2026-02-09"
         )
 
     def serve_agent(*args, **kwargs):
         raise RuntimeError(
             "client.py serve_agent() is deprecated and incompatible with a2a-sdk>=1.0. "
-            "Use a2a_adapter.server.serve_agent(adapter) instead. See: "
-            "https://github.com/hybro-ai/a2a-adapter/blob/main/docs/migration-v0.2.md"
+            "Use a2a_adapter.server.serve_agent(adapter) instead. "
+            "See the v0.2 migration notes: "
+            "https://github.com/hybroai/a2a-adapter/blob/main/CHANGELOG.md#020---2026-02-09"
         )

@@ -1,6 +1,6 @@
 # a2a-adapter API Reference
 
-**Version**: 0.2.0 | **Python**: >=3.11 | **License**: Apache-2.0
+**API line**: 0.2 | **Python**: >=3.11 | **License**: Apache-2.0
 
 For installation and quickstart, see SKILL.md.
 
@@ -26,6 +26,10 @@ from a2a_adapter import (
     LangGraphAdapter,
     CrewAIAdapter,
     OpenClawAdapter,
+    ClaudeCodeAdapter,
+    CodexAdapter,
+    HermesAdapter,
+    PiAdapter,
     CallableAdapter,
     OllamaAdapter,
     OllamaClient,
@@ -49,8 +53,8 @@ adapter = N8nAdapter(
     input_mapper=None,        # Optional: (raw_input, context_id) -> dict
     parse_json_input=True,    # Auto-parse JSON strings
     default_inputs=None,      # Merge into every request
-    max_retries=3,            # Retry count
-    retry_delay=1.0,          # Seconds between retries
+    max_retries=2,            # Retry count
+    backoff=0.25,             # Retry backoff in seconds
 )
 serve_agent(adapter, port=9000)
 ```
@@ -100,8 +104,8 @@ from a2a_adapter import CrewAIAdapter, serve_agent
 
 adapter = CrewAIAdapter(
     crew=your_crew,           # Required: CrewAI Crew instance
-    timeout=600,              # Execution timeout (seconds)
-    input_key="inputs",       # Key for crew inputs (default: "inputs")
+    timeout=300,              # Execution timeout (seconds)
+    inputs_key="inputs",      # Key for crew inputs (default: "inputs")
     name="CrewAI Agent",
     description="Research crew",
 )
@@ -114,7 +118,7 @@ serve_agent(adapter, port=9003)  # No streaming support
 from a2a_adapter import OpenClawAdapter, serve_agent
 
 adapter = OpenClawAdapter(
-    thinking="low",           # Thinking level: "none", "low", "medium", "high"
+    thinking="low",           # off/minimal/low/medium/high/xhigh
     agent_id="main",          # Agent ID
     session_id=None,          # Auto-generated if None
     timeout=600,              # Subprocess timeout (seconds)
@@ -124,6 +128,30 @@ adapter = OpenClawAdapter(
 )
 serve_agent(adapter, port=9004)  # Supports cancel() via process kill
 ```
+
+### Local coding-agent adapters
+
+Claude Code, Codex, and Pi can be exposed from Python or directly through the
+`a2a-adapter` CLI. Hermes is an in-process Python SDK integration.
+
+```python
+from a2a_adapter import ClaudeCodeAdapter, CodexAdapter, PiAdapter, HermesAdapter
+
+claude = ClaudeCodeAdapter(working_dir="/path/to/project")
+codex = CodexAdapter(working_dir="/path/to/project")
+pi = PiAdapter(working_dir="/path/to/project")
+hermes = HermesAdapter(model=None, provider=None)
+```
+
+```bash
+a2a-adapter claude --port 9010
+a2a-adapter codex --port 9011
+a2a-adapter pi --port 9012
+```
+
+See `examples/claude_code_agent.py`, `examples/codex_agent.py`,
+`examples/pi_agent.py`, and `examples/hermes_agent.py` for complete setup and
+session details.
 
 ### OllamaAdapter -- Local Ollama LLM (streaming)
 
@@ -204,7 +232,7 @@ app = to_a2a(
 # daphne app:app
 ```
 
-Auto-enabled capabilities on the generated AgentCard: `streaming` (auto-detected), `push_notifications=True`, `state_transition_history=True`.
+Auto-enabled capabilities on the generated AgentCard: `streaming` (auto-detected) and `push_notifications=True`.
 
 ### `build_agent_card()` -- generate AgentCard
 
@@ -354,7 +382,7 @@ adapter = load_adapter({
 serve_agent(adapter)
 ```
 
-Valid adapter values: `"n8n"`, `"langchain"`, `"langgraph"`, `"crewai"`, `"openclaw"`, `"ollama"`, `"callable"`, or any registered name.
+Valid adapter values: `"n8n"`, `"langchain"`, `"langgraph"`, `"crewai"`, `"openclaw"`, `"ollama"`, `"callable"`, `"claude-code"`, `"codex"`, `"hermes"`, `"pi"`, or any registered name.
 
 ## Third-Party Adapter Registration
 
@@ -374,11 +402,14 @@ Registered adapters take priority over built-ins with the same name.
 
 ## Input Handling Pipeline
 
-All built-in adapters use a 3-priority input pipeline:
+The n8n, LangChain, LangGraph, and CrewAI adapters support a configurable
+input pipeline:
 
-1. **`input_mapper`** (highest priority): `Callable[[str, str|None], dict]` -- custom function to transform raw input
-2. **JSON parse**: auto-parse if input looks like JSON
-3. **`input_key`** (fallback): wraps text as `{input_key: text}`
+1. **`input_mapper`** (highest priority): custom function that transforms raw input
+2. **JSON parse**: auto-parse input that looks like a JSON object
+3. **Input key fallback**: wrap text under the adapter's configured input key
+
+CLI-backed adapters and Hermes accept plain user text directly.
 
 ## Accessing RequestContext
 
@@ -415,6 +446,10 @@ async with MyAdapter() as adapter:
 | `LangGraphAdapter` | Auto-detected | No | No | `langgraph` |
 | `CrewAIAdapter` | No | No | No | `crewai` |
 | `OpenClawAdapter` | No | Yes (kill) | No | None |
+| `ClaudeCodeAdapter` | Yes | Yes (kill) | No | Claude Code CLI |
+| `CodexAdapter` | No | Yes (kill) | No | Codex CLI |
+| `PiAdapter` | Yes | Yes | No | Pi CLI |
+| `HermesAdapter` | Yes | Yes (interrupt) | No | Hermes on `PYTHONPATH` |
 | `OllamaAdapter` | Always | No | No | None |
 | `CallableAdapter` | Optional | No | No | None |
 
@@ -473,7 +508,11 @@ HTTP POST / (JSON-RPC) -> DefaultRequestHandler.on_cancel_task()
 | LangChain chain | `LangChainAdapter(runnable=chain)` |
 | LangGraph workflow | `LangGraphAdapter(graph=graph)` |
 | CrewAI crew | `CrewAIAdapter(crew=crew)` |
+| Claude Code CLI | `ClaudeCodeAdapter(working_dir=...)` |
+| Codex CLI | `CodexAdapter(working_dir=...)` |
+| Pi coding agent | `PiAdapter(working_dir=...)` |
 | OpenClaw agent | `OpenClawAdapter(...)` |
+| Hermes Agent | `HermesAdapter(...)` |
 | Local Ollama model | `OllamaAdapter(model="llama3.2")` |
 | Any other framework | Subclass `BaseA2AAdapter`, implement `invoke()` |
 | Need streaming | Implement `stream()` or use LangChain/LangGraph/Ollama (auto) |

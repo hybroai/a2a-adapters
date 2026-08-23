@@ -605,7 +605,7 @@ class BaseA2AAdapter(ABC):
 
         Override to provide agent name, description, skills, and capabilities.
         The server layer uses this to auto-generate the AgentCard served at
-        /.well-known/agent.json.
+        /.well-known/agent-card.json.
         """
         return AdapterMetadata()
 

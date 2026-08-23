@@ -1,10 +1,13 @@
-# a2a-adapter v0.2 Architecture Design
+# Archived: a2a-adapter v0.2 Architecture Design
 
-> **Current implementation note (2026-08-09):** This document records the
-> original v0.2 SDK design. The repository now also ships a thin
-> `a2a-adapter` console entry point for Pi, Codex, Claude, and OpenClaw. It
-> constructs the existing adapters and delegates to `serve_agent()`; Hermes
-> remains SDK-only.
+> **Historical document:** This file records the original v0.2 design and is
+> retained for architecture history. It is not current API documentation.
+> Refer to [`README.md`](../../README.md), [`ARCHITECTURE.md`](../../ARCHITECTURE.md),
+> and [`QUICKSTART.md`](../../QUICKSTART.md) for the maintained documentation.
+>
+> The repository now also ships a thin `a2a-adapter` console entry point for
+> Pi, Codex, Claude, and OpenClaw. It constructs the existing adapters and
+> delegates to `serve_agent()`; Hermes remains SDK-only.
 
 ## 1. Executive Summary
 

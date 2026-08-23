@@ -203,7 +203,7 @@ v0.1 API still works but is deprecated.
 
 - SDK-First: delegates task management, SSE streaming, push notifications to A2A SDK
 - ~85% code reduction in adapter implementations
-- See `DESIGN_V0.2.md` for full architecture rationale
+- See [`docs/archive/DESIGN_V0.2.md`](docs/archive/DESIGN_V0.2.md) for the historical architecture rationale
 
 ## [0.1.6] - 2026-02-05
 

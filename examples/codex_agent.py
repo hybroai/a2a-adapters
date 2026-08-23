@@ -25,7 +25,7 @@ Security:
 Usage:
     python examples/codex_agent.py
     python examples/codex_agent.py /path/to/project
-    # Agent card at http://localhost:9011/.well-known/agent.json
+    # Agent card at http://localhost:9011/.well-known/agent-card.json
 """
 
 import os
@@ -45,10 +45,10 @@ adapter = CodexAdapter(
     # skip_git_check=True,
 )
 
-print(f"Starting Codex A2A agent...")
+print("Starting Codex A2A agent...")
 print(f"  Working directory: {working_dir}")
 print(f"  Bypass approvals: {adapter.bypass_approvals}")
 print(f"  Skip git check: {adapter.skip_git_check}")
-print(f"  Agent card: http://localhost:9011/.well-known/agent.json")
+print("  Agent card: http://localhost:9011/.well-known/agent-card.json")
 
 serve_agent(adapter, port=9011)

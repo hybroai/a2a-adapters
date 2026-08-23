@@ -14,10 +14,8 @@ Usage:
 import asyncio
 import json
 import os
-import signal
 import socket
 import sys
-import time
 import uuid
 
 import httpx
@@ -55,9 +53,8 @@ def fail(msg: str) -> None:
 
 # ──── A2A JSON-RPC helpers ────
 
-def make_send_request(message: str, task_id: str | None = None) -> dict:
+def make_send_request(message: str) -> dict:
     """Build a JSON-RPC message/send request."""
-    tid = task_id or str(uuid.uuid4())
     return {
         "jsonrpc": "2.0",
         "id": 1,
@@ -105,7 +102,9 @@ async def start_server(app, port: int) -> asyncio.Task:
     for _ in range(50):
         try:
             async with httpx.AsyncClient() as c:
-                r = await c.get(f"http://127.0.0.1:{port}/.well-known/agent.json", timeout=2)
+                r = await c.get(
+                    f"http://127.0.0.1:{port}/.well-known/agent-card.json", timeout=2
+                )
                 if r.status_code == 200:
                     return task, server
         except (httpx.ConnectError, httpx.ReadError):
@@ -119,7 +118,7 @@ async def start_server(app, port: int) -> asyncio.Task:
 async def test_agent_card(base_url: str, name: str) -> None:
     step(f"GET {name} agent card")
     async with httpx.AsyncClient() as c:
-        r = await c.get(f"{base_url}/.well-known/agent.json", timeout=10)
+        r = await c.get(f"{base_url}/.well-known/agent-card.json", timeout=10)
     assert r.status_code == 200, f"Expected 200, got {r.status_code}"
     card = r.json()
     assert "name" in card, "Agent card missing 'name'"
@@ -317,7 +316,7 @@ async def main():
         # ── Verify Codex doesn't support streaming ──
         step("Verify Codex agent card reports streaming=false")
         async with httpx.AsyncClient() as c:
-            r = await c.get(f"{codex_url}/.well-known/agent.json", timeout=10)
+            r = await c.get(f"{codex_url}/.well-known/agent-card.json", timeout=10)
             card = r.json()
             streaming = card.get("capabilities", {}).get("streaming", None)
             if streaming is False:
@@ -340,9 +339,9 @@ async def main():
                 all_pass = False
 
         if all_pass:
-            print(f"\n  All tests passed!")
+            print("\n  All tests passed!")
         else:
-            print(f"\n  Some tests failed!")
+            print("\n  Some tests failed!")
             sys.exit(1)
 
     finally:

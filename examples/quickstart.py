@@ -1,14 +1,14 @@
 """
-Example: v0.2 Quick Start — All Adapters
+Example: Quick Start — Core Adapters
 
-Demonstrates the new v0.2 API for each adapter type.
+Demonstrates the current API for callable, n8n, and custom adapters.
 Each adapter can be started with a single `serve_agent()` call.
 No manual AgentCard construction needed — it's auto-generated.
 
 Usage:
-    python examples/v02_quickstart.py callable   # Echo agent
-    python examples/v02_quickstart.py n8n        # n8n webhook
-    python examples/v02_quickstart.py custom     # Custom adapter class
+    python examples/quickstart.py callable   # Echo agent
+    python examples/quickstart.py n8n        # n8n webhook
+    python examples/quickstart.py custom     # Custom adapter class
 """
 
 import sys
